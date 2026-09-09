@@ -18,7 +18,9 @@ const ProductDetailsPage = () => {
             try {
                 const response = await getAPIServer(`api/product/getproduct/${id}`);
 
-                setProduct(response);
+                console.log(response.product);
+
+                setProduct(response.product);
             } catch (error) {
                 console.error("Error fetching product:", error);
                 setProduct(null);

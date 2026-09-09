@@ -33,10 +33,13 @@ const AddCategory = () => {
                 description: addCategoryRequest.description,
             }
             const resp = await getAPIServer("api/category/addcategory", "POST", data);
-            console.log(resp);
-            if (resp._id) {
+
+            console.log("resp", resp);
+
+            if (resp.message == "Category added successfully") {
                 router.push("/dashboard/categories");
-            } else if (resp.message && resp.message.includes("duplicate key error")) {
+                router.refresh();
+            } else if (resp.message && resp.message == "Category with this name already exists") {
                 setError(["This Category Already Exists."]);
                 setBtnText("Add Category");
             } else {

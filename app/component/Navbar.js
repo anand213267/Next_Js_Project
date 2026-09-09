@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 
 const Navbar = (props) => {
     const { userData } = props;
-    console.log("user", userData);
     const dropdownRef = useRef(null);
     // const { isLogin, setIsLogin, userData } = useContext(AuthContext);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);

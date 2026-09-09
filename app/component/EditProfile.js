@@ -3,14 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import getAPIServer from "../APIServer";
 
-const EditProfile = ({ data }) => {
-    const { userData, isLogin, setUserData } = useContext(AuthContext);
+const EditProfile = ({ userData }) => {
     const [editRequest, setEditRequest] = useState({
-        name: data.name,
-        email: data.email,
+        name: userData.name,
+        email: userData.email,
     });
     const [error, setError] = useState([]);
     const [btntext, setBtnText] = useState("Update");
@@ -30,38 +28,29 @@ const EditProfile = ({ data }) => {
             return;
         }
         try {
-            const resp = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/editprofile/${userData.id}`, {
-                method: "PATCH",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name: editRequest.name,
-                    email: editRequest.email,
-                }),
+            const response = await getAPIServer(`api/auth/editprofile/${userData.id}`, "PATCH", {
+                name: editRequest.name,
+                email: editRequest.email,
             });
-            const data = await resp.json();
-            console.log(data.message)
-            if (data.message == "Profile updated successfully") {
-                setUserData(data.user);
-                localStorage.setItem("userData", JSON.stringify(data.user));
+            // const data = await response.json();
+            console.log(response)
+
+            if (response.message == "Profile updated successfully") {
+                // setUserData(data.user);
+                document.cookie = `userData=${encodeURIComponent(JSON.stringify(response.user))}; path=/`;
                 router.push("/");
+                router.refresh();
+
             } else {
-                setError([data.message]);
+                // setError([response.message]);
                 setBtnText("Update");
             }
         } catch (e) {
             console.log(e);
-            setBtnText("Register");
+            setBtnText("Update");
             setError(["Error : " + e]);
         }
     }
-    useEffect(() => {
-        if (!isLogin) {
-            router.push('/login')
-        }
-    }, [isLogin])
     return (
         <>
             <div className="flex justify-center w-full">

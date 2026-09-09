@@ -10,8 +10,8 @@ const CategoriesPage = async () => {
             <div>
                 <Link href="/dashboard"><button className="p-2 border m-2 rounded-lg bg-red-700 text-white hover:bg-red-500 hover:text-white hover:cursor-pointer">&#8592; Back to Home</button></Link>
                 <Link href="/dashboard/add-category"><button className="p-2 border m-2 rounded-lg bg-blue-700 text-white hover:bg-blue-500 hover:text-white hover:cursor-pointer">Add Category</button></Link>
-                {data && data.length > 0 ? (
-                    <Category data={data} />
+                {data?.categories && data?.categories.length > 0 ? (
+                    <Category data={data.categories} />
                 ) : (
                     <p className="text-center text-red-600">
                         Category not found

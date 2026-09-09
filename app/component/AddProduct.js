@@ -37,25 +37,27 @@ const AddProduct = ({ data }) => {
             return;
         }
         try {
+            let errors = '';
             const resp = await getAPIServer("api/product/addproduct", "POST", {
                 name: addProductRequest.name,
                 description: addProductRequest.description,
                 category: addProductRequest.category,
                 price: addProductRequest.price,
             });
-            if (resp._id) {
+            if (resp.message == "Product added successfully!") {
                 router.push("/dashboard/products");
-            } else if (resp.message && resp.message.includes("duplicate key error")) {
-                setError(["This Product Already Exists."]);
+            } else if (resp.message && resp.message == "Product with this name already exists") {
+                errors = "Product with this name already exists";
                 setBtnText("Add Product");
             } else {
-                setError(["Product not added"]);
+                errors = "Product not added";
                 setBtnText("Add Product");
             }
+            setError(errors);
         } catch (e) {
             console.log(e);
             setBtnText("Add Product");
-            setError(["Error : " + e]);
+            setError("Error : " + e);
         }
     }
     // useEffect(() => {

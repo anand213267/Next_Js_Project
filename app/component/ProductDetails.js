@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const ProductDetails = ({ data }) => {
+    console.log(data)
     const router = useRouter();
     return (
         <>

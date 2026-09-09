@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }) {
         return redirect("/login");
     }
     return <>
-        <Navbar userData={userData} />
+        <Navbar userData={JSON.parse(userData)} />
         {children}
     </>;
 }  

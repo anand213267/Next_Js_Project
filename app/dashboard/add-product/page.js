@@ -7,8 +7,8 @@ const productAddPage = async () => {
 
         return (
             <div>
-                {data && data.length > 0 ? (
-                    <AddProduct data={data} />
+                {data?.categories && data?.categories.length > 0 ? (
+                    <AddProduct data={data.categories} />
                 ) : (
                     <p className="text-center text-red-600">
                         Category not found
