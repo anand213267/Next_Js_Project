@@ -4,8 +4,9 @@ import Link from "next/link";
 import { AuthContext } from "../context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
-const Login = () => {
+const Login = ({ message }) => {
     // const { isLogin, setIsLogin, setUserData } = useContext(AuthContext);
     const [loginReq, setLoginReq] = useState({ email: "", password: "" });
     const [error, setError] = useState([]);
@@ -13,7 +14,7 @@ const Login = () => {
     const router = useRouter();
     const handleLogin = async () => {
         setBtnText("Please wait...");
-        
+
         let validationErrors = [];
         if (!loginReq.email) {
             validationErrors.push("Email is required");
@@ -21,7 +22,7 @@ const Login = () => {
         if (!loginReq.password) {
             validationErrors.push("Password is required");
         }
-        
+
         if (validationErrors.length > 0) {
             setError(validationErrors);
             setBtnText("Login");
@@ -48,6 +49,7 @@ const Login = () => {
                 document.cookie = `userData=${encodeURIComponent(JSON.stringify(data.user))}; path=/`;
                 // setIsLogin(true);
                 // setUserData(data.user);
+                toast.success("Login successful!");
                 router.push("/dashboard/products");
                 router.refresh();
             } else {
@@ -60,6 +62,10 @@ const Login = () => {
             setError(["Error : " + e]);
         }
     }
+
+    useEffect(() => {
+        toast.success(message);
+    }, [message])
 
     return (
         <>

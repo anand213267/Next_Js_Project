@@ -6,6 +6,7 @@ import { ColorContext } from "./context/ColorContext";
 import Task from "./component/Task";
 import AuthProvider from "./context/AuthContext";
 import { cookies } from 'next/headers';
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,8 @@ export default async function RootLayout({ children }) {
             </ThemeWrapper>
           </ColorContextProvider> */}
         {/* </AuthProvider> */}
+
+        <Toaster position="top-right" />
       </body>
     </html>
   );

@@ -6,6 +6,12 @@ import { useRouter } from "next/navigation";
 const ProductDetails = ({ data }) => {
     console.log(data)
     const router = useRouter();
+    const getImage = (imagePath) => {
+        // Replace Windows backslashes with forward slashes for correct URL formatting
+        const formattedPath = imagePath.replace(/\\/g, '/');
+        const baseUrl = process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, ''); // Remove trailing slash if present
+        return `${baseUrl}/${formattedPath}`;
+    }
     return (
         <>
             <button onClick={() => router.back()} className="px-4 py-2 border my-2 rounded-lg bg-red-700 text-white hover:bg-red-500 hover:text-white hover:cursor-pointer">
@@ -16,15 +22,15 @@ const ProductDetails = ({ data }) => {
                     <div className="md:grid-cols-2 gap-8 p-8">
 
                         {/* Product Image */}
-                        <div className="flex items-center justify-center bg-gray-50 rounded-xl p-6">
-                            {/* <Image
-                                src={data.images[0]}
+                        {data.image && <div className="flex items-center justify-center bg-gray-50 rounded-xl p-6">
+                            <Image
+                                src={getImage(data.image)}
                                 width={400}
                                 height={400}
-                                alt={data.title}
+                                alt={data.name}
                                 className="object-contain max-h-80"
-                            /> */}
-                        </div>
+                            />
+                        </div>}
 
                         {/* Product Details */}
                         <div className="flex flex-col justify-center">

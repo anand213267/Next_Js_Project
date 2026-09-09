@@ -1,9 +1,10 @@
 import Login from "../component/Login";
 
-const LoginPage = () => {
+const LoginPage = async ({ searchParams }) => {
+    const data = await searchParams;
     return (
         <>
-            <Login />
+            <Login message={data.message} />
         </>
     )
 }

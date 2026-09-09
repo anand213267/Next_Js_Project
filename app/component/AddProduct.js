@@ -10,7 +10,8 @@ const AddProduct = ({ data }) => {
         name: "",
         description: "",
         category: "",
-        price: ""
+        price: "",
+        image: null
     });
     const [categoryData, setCategoryData] = useState(data);
     const [error, setError] = useState([]);
@@ -37,51 +38,34 @@ const AddProduct = ({ data }) => {
             return;
         }
         try {
-            let errors = '';
-            const resp = await getAPIServer("api/product/addproduct", "POST", {
-                name: addProductRequest.name,
-                description: addProductRequest.description,
-                category: addProductRequest.category,
-                price: addProductRequest.price,
-            });
-            if (resp.message == "Product added successfully!") {
+            let errors = [];
+            
+            const formData = new FormData();
+            formData.append("name", addProductRequest.name);
+            formData.append("description", addProductRequest.description);
+            formData.append("category", addProductRequest.category);
+            formData.append("price", addProductRequest.price);
+            if (addProductRequest.imgPath) {
+                formData.append("image", addProductRequest.imgPath); // "image" or the field name expected by your API
+            }
+
+            const resp = await getAPIServer("api/product/addproduct", "POST", formData);
+            if (resp.message == "Product added successfully") {
                 router.push("/dashboard/products");
             } else if (resp.message && resp.message == "Product with this name already exists") {
-                errors = "Product with this name already exists";
+                errors = ["Product with this name already exists"];
                 setBtnText("Add Product");
             } else {
-                errors = "Product not added";
+                errors = ["Product not added"];
                 setBtnText("Add Product");
             }
             setError(errors);
         } catch (e) {
             console.log(e);
             setBtnText("Add Product");
-            setError("Error : " + e);
+            setError(["Error : " + e]);
         }
     }
-    // useEffect(() => {
-    //     fetchCategories();
-    // }, []);
-
-    // const fetchCategories = async () => {
-    //     try {
-    //         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/getcategory`, {
-    //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
-    //                 "Content-Type": "application/json",
-    //                 "ngrok-skip-browser-warning": "true"
-    //             },
-    //         });
-    //         const data = await response.json();
-    //         if (data) {
-    //             setCategoryData(data);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching categories:", error);
-    //         setMessage(["Failed to fetch categories"]);
-    //     }
-    // };
     return (
         <>
             <Link href="/dashboard/products"><button className="p-2 border m-2 rounded-lg bg-red-700 text-white hover:bg-red-500 hover:text-white hover:cursor-pointer">&#8592; Back to Products</button></Link>
@@ -116,6 +100,10 @@ const AddProduct = ({ data }) => {
                                 <option key={item._id} value={item.name}>{item.name}</option>
                             ))}
                         </select>
+                    </div>
+
+                    <div className="m-4 w-full">
+                        <input className="p-2 bg-white border border-gray-200 rounded-lg w-full" type="file" accept="image/*" placeholder="Image" onChange={(e) => setAddProductRequest({ ...addProductRequest, imgPath: e.target.files[0] })} />
                     </div>
 
                     <div className="text-center mb-4">

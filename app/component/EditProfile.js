@@ -32,8 +32,6 @@ const EditProfile = ({ userData }) => {
                 name: editRequest.name,
                 email: editRequest.email,
             });
-            // const data = await response.json();
-            console.log(response)
 
             if (response.message == "Profile updated successfully") {
                 // setUserData(data.user);

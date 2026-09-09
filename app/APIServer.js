@@ -8,17 +8,25 @@ export default async function getAPIServer(apiName, method = "GET", body = null)
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
 
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+
+        let requestBody = body;
+
+        if (body && !(body instanceof FormData)) {
+            headers["Content-Type"] = "application/json";
+            requestBody = JSON.stringify(body);
+        }
+
         const response = await fetch(`${APISERVER}/${apiName}`, {
             method,
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-                "ngrok-skip-browser-warning": "true",
-            },
-            body: body ? JSON.stringify(body) : null,
+            headers,
+            body: requestBody,
         });
 
         const data = await response.json();
+        console.log(data)
 
         // Redirect on invalid/expired token
         if (

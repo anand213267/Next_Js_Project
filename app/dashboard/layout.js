@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Navbar from "../component/Navbar";
+import Task from "../component/Task";
 
 export default async function DashboardLayout({ children }) {
     const cookieStore = await cookies();
@@ -11,6 +12,7 @@ export default async function DashboardLayout({ children }) {
     }
     return <>
         <Navbar userData={JSON.parse(userData)} />
+        <Task />
         {children}
     </>;
 }  
